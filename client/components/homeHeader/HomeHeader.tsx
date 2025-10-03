@@ -13,17 +13,17 @@ import { styles } from "./homeHeader.style";
 
 type WeekType = {
     day: number;
-    complete: boolean;
+    complete: boolean | null;
 };
 
 const WEEKS_MOCK: WeekType[] = [
-    { day: 1, complete: false },
-    { day: 2, complete: true },
-    { day: 3, complete: true },
-    { day: 4, complete: false },
-    { day: 5, complete: false },
-    { day: 6, complete: false },
-    { day: 7, complete: false },
+    { day: 1, complete: null },
+    { day: 2, complete: null },
+    { day: 3, complete: null },
+    { day: 4, complete: null },
+    { day: 5, complete: null },
+    { day: 6, complete: null },
+    { day: 7, complete: null },
 ];
 
 export const HomeHeader: FC<IHomeHeader> = ({
@@ -36,30 +36,49 @@ export const HomeHeader: FC<IHomeHeader> = ({
     const progressAnimation = useRef(new Animated.Value(-200)).current;
     const headerAnimation = useRef(new Animated.Value(0)).current;
     const opacityAnimation = useRef(new Animated.Value(0)).current;
+    const today = new Date().getDay();
+    const todayIndex = today === 0 ? 7 : today;
 
     useEffect(() => {
         const loadWeek = async () => {
             const today = new Date();
             const currentDay = today.getDay() === 0 ? 7 : today.getDay(); // 1..7
 
+            // Получаем сохранённую неделю
             const savedWeekStr = await AsyncStorage.getItem("weekProgress");
+            let newWeek: WeekType[] = WEEKS_MOCK.map((w) => ({ ...w }));
 
-            let newWeek: WeekType[] = WEEKS_MOCK.map((w) => ({
-                ...w,
-                complete: false,
-            }));
+            if (savedWeekStr) {
+                const savedWeek: WeekType[] = JSON.parse(savedWeekStr);
 
-            if (savedWeekStr && currentDay !== 1) {
-                newWeek = JSON.parse(savedWeekStr);
+                // Обновляем статусы дней с учётом нового дня
+                newWeek = savedWeek.map((w) => {
+                    if (w.day < currentDay && w.complete === null) {
+                        // День прошёл, но не отмечен
+                        return { ...w, complete: false };
+                    }
+                    if (w.day === currentDay) {
+                        // Сегодняшний день
+                        return { ...w, complete: true };
+                    }
+                    if (w.day > currentDay) {
+                        // День ещё не наступил
+                        return { ...w, complete: null };
+                    }
+                    return w; // уже установлен true/false
+                });
+            } else {
+                // Если данных нет, создаём с сегодняшним днём
+                newWeek = newWeek.map((w) => {
+                    if (w.day < currentDay) return { ...w, complete: false };
+                    if (w.day === currentDay) return { ...w, complete: true };
+                    return { ...w, complete: null };
+                });
             }
-
-            // Отмечаем сегодняшний день как complete (если еще не выполнен)
-            newWeek = newWeek.map((w) =>
-                w.day === currentDay ? { ...w, complete: true } : w
-            );
 
             setWeek(newWeek);
 
+            // Сохраняем в AsyncStorage
             await AsyncStorage.setItem("currentDay", currentDay.toString());
             await AsyncStorage.setItem("weekProgress", JSON.stringify(newWeek));
         };
@@ -141,9 +160,12 @@ export const HomeHeader: FC<IHomeHeader> = ({
                                     style={[
                                         styles.dayContainer,
                                         {
-                                            borderColor: complete
-                                                ? COLORS.primary
-                                                : COLORS.gray04,
+                                            borderColor:
+                                                complete === true
+                                                    ? COLORS.primary
+                                                    : complete === false
+                                                    ? COLORS.error
+                                                    : COLORS.gray04, // null
                                         },
                                     ]}
                                 >
@@ -151,14 +173,20 @@ export const HomeHeader: FC<IHomeHeader> = ({
                                         style={[
                                             styles.day,
                                             {
-                                                color: complete
-                                                    ? COLORS.primary
-                                                    : COLORS.text,
+                                                color:
+                                                    complete === true
+                                                        ? COLORS.primary
+                                                        : complete === false
+                                                        ? COLORS.error
+                                                        : COLORS.text, // null
                                             },
                                         ]}
                                     >
                                         {day}
                                     </Text>
+                                    {day === todayIndex && (
+                                        <View style={styles.todayDot}></View>
+                                    )}
                                 </View>
                             ))}
                         </View>

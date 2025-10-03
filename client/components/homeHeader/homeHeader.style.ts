@@ -42,6 +42,7 @@ export const styles = StyleSheet.create({
         justifyContent: "space-between",
     },
     dayContainer: {
+        position: "relative",
         borderRadius: 20,
         width: 40,
         height: 40,
@@ -66,5 +67,13 @@ export const styles = StyleSheet.create({
         color: COLORS.text,
         fontSize: 20,
         fontWeight: "600",
+    },
+    todayDot: {
+        position: "absolute",
+        backgroundColor: "white",
+        width: 5,
+        height: 5,
+        borderRadius: "50%",
+        bottom: -14,
     },
 });
