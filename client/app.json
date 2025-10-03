@@ -1,0 +1,44 @@
+{
+    "expo": {
+        "jsEngine": "jsc",
+        "name": "fitness-app",
+        "slug": "fitness-app",
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "icon": "./assets/images/mamont-512x512.png",
+        "scheme": "fitnessapp",
+        "userInterfaceStyle": "dark",
+        "newArchEnabled": true,
+        "splash": {
+            "image": "./assets/images/mamont-512x512.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#141414"
+        },
+        "ios": {
+            "supportsTablet": true,
+            "bundleIdentifier": "com.dmitrychervochkin.fitness-app"
+        },
+        "android": {
+            "adaptiveIcon": {
+                "foregroundImage": "./assets/images/mamont-512x512.png",
+                "backgroundColor": "#141414"
+            },
+            "edgeToEdgeEnabled": true,
+            "package": "com.dmitrychervochkin.fitnessapp"
+        },
+        "web": {
+            "bundler": "metro",
+            "output": "static",
+            "favicon": "./assets/images/mamont-512x512.png"
+        },
+        "plugins": [
+            "expo-router",
+            "expo-splash-screen",
+            "expo-secure-store",
+            "expo-web-browser"
+        ],
+        "experiments": {
+            "typedRoutes": true
+        }
+    }
+}
