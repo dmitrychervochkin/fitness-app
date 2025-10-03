@@ -6,15 +6,20 @@ import { COLORS } from "@/constants";
 export const Button: FC<IButton> = ({
     children,
     style,
+    disabled = false,
     size = "medium",
     btnStyle = "default",
     textStyle,
     onPress,
     ...props
 }) => {
+    const pressHandle = () => {
+        if (disabled || !onPress) return;
+        onPress();
+    };
     return (
         <Pressable
-            onPress={onPress}
+            onPress={pressHandle}
             {...props}
             style={({ pressed }) => [
                 style,

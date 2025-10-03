@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ITimer } from "./timer.interface";
 import { Animated } from "react-native";
 import { useSelector } from "react-redux";
-import { selectStartTime } from "@/slices/appSlice/appSlice";
+import { selectStartTime } from "@/slices/workoutSlice/workoutSlice";
 import { formatTime } from "@/utils";
 
 export const Timer: React.FC<ITimer> = ({ style, animation }) => {

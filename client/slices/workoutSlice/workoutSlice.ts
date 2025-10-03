@@ -19,12 +19,16 @@ interface IUserExercise {
 }
 
 interface ICurrentWorkoutState {
+    isStartWorkout: boolean;
+    startTime: null | number;
     name: string;
     notes: string;
     userExercises: IUserExercise[];
 }
 
 const initialState: ICurrentWorkoutState = {
+    isStartWorkout: false,
+    startTime: null,
     name: "",
     notes: "",
     userExercises: [],
@@ -34,6 +38,12 @@ const workoutSlice = createSlice({
     name: "workout",
     initialState,
     reducers: {
+        startWorkout: (state) => {
+            state.isStartWorkout = true;
+            state.startTime = Date.now();
+        },
+        finishWorkout: () => initialState,
+
         setWorkout: (state, action) => {
             return { ...state, ...action.payload };
         },
@@ -58,7 +68,6 @@ const workoutSlice = createSlice({
                 (e) => e.id === exerciseId
             );
 
-            console.log(exercise);
             if (exercise) exercise.sets.push({ id, ...set });
         },
         updateUserExerciseSet: (state, action) => {
@@ -80,19 +89,22 @@ const workoutSlice = createSlice({
                 exercise.sets = exercise.sets.filter((s) => s.id !== setId);
             }
         },
-        resetWorkout: () => initialState,
     },
 });
 
 export const {
     setWorkout,
-    resetWorkout,
     addUserExercise,
     removeUserExercise,
     addUserExerciseSet,
     removeUserExerciseSet,
+    startWorkout,
+    finishWorkout,
 } = workoutSlice.actions;
 
+export const selectIsStartWorkout = (state: RootState) =>
+    state.workout.isStartWorkout;
+export const selectStartTime = (state: RootState) => state.workout.startTime;
 export const selectUserExercises = (state: RootState) =>
     state.workout.userExercises;
 

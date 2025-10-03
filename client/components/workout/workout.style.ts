@@ -9,7 +9,6 @@ export const styles = StyleSheet.create({
     container: {
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
-        // paddingHorizontal: 20,
         shadowColor: "black",
         shadowOffset: { width: 0, height: 0 },
         shadowOpacity: 0.7,

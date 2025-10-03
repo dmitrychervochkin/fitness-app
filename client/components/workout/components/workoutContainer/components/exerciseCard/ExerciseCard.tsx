@@ -78,6 +78,7 @@ export const ExerciseCard: FC<IExerciseCard> = ({
                     )
                 )}
             </View>
+
             <View style={styles.addBtn}>
                 <Icon
                     Icon={Plus}

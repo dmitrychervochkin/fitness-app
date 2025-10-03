@@ -14,21 +14,9 @@ const initialState: AppState = {
 const appSlice = createSlice({
     name: "app",
     initialState,
-    reducers: {
-        startWorkout: (state) => {
-            state.isStartWorkout = true;
-            state.startTime = Date.now();
-        },
-
-        finishWorkout: (state) => {
-            state.isStartWorkout = false;
-        },
-    },
+    reducers: {},
 });
 
-export const { startWorkout, finishWorkout } = appSlice.actions;
-export const selectIsStartWorkout = (state: RootState) =>
-    state.app.isStartWorkout;
-export const selectStartTime = (state: RootState) => state.app.startTime;
+export const {} = appSlice.actions;
 
 export default appSlice.reducer;

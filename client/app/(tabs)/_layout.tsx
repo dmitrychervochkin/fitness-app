@@ -18,7 +18,7 @@ import { useSelector } from "react-redux";
 import { selectToken } from "@/slices/authSlice/authSlice";
 import { useNavigate } from "@/hooks/useNavigate";
 import { Text } from "react-native";
-import { selectIsStartWorkout } from "@/slices/appSlice/appSlice";
+import { selectIsStartWorkout } from "@/slices/workoutSlice/workoutSlice";
 
 export type MainTabParamList = {
     Dumbell: undefined;

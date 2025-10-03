@@ -10,7 +10,10 @@ import {
 import { MiniHeader } from "@/components/miniHeader/MiniHeader";
 import { COLORS } from "@/constants";
 import { server } from "@/bff";
-import { startWorkout } from "@/slices/appSlice/appSlice";
+import {
+    selectIsStartWorkout,
+    startWorkout,
+} from "@/slices/workoutSlice/workoutSlice";
 import { SquarePlus } from "lucide-react-native";
 import { FC, useEffect, useRef, useState } from "react";
 import {
@@ -22,10 +25,11 @@ import {
     Text,
     View,
 } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { IWorkoutTemplate } from "@/types";
 
 const HomeScreen: FC = () => {
+    const isStartWorkout = useSelector(selectIsStartWorkout);
     const [showProgress, setShowProgress] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [showMiniHeader, setShowMiniHeader] = useState(false);
@@ -107,7 +111,10 @@ const HomeScreen: FC = () => {
                 >
                     <Container>
                         <Text style={styles.quickStart}>Быстрый старт</Text>
-                        <Button onPress={() => dispatch(startWorkout())}>
+                        <Button
+                            onPress={() => dispatch(startWorkout())}
+                            disabled={isStartWorkout}
+                        >
                             Начать пустую тренировку
                         </Button>
                     </Container>

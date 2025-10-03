@@ -1,7 +1,4 @@
-import {
-    finishWorkout,
-    selectIsStartWorkout,
-} from "@/slices/appSlice/appSlice";
+import { finishWorkout, selectIsStartWorkout } from "@/slices/workoutSlice/workoutSlice";
 import React, { FC, useEffect, useRef, useState } from "react";
 import {
     StatusBar,
@@ -130,7 +127,7 @@ export const Workout: FC = () => {
                                         />
                                         <Timer style={styles.headerText} />
                                     </View>
-                                    <WorkoutContainer />
+                                    <WorkoutContainer setIsHide={setIsHide} />
                                 </View>
                             </View>
                         </TouchableWithoutFeedback>

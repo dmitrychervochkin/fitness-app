@@ -35,35 +35,9 @@ export const SetCard: FC<ISetCard> = ({
         useState(durationSecondsState);
 
     const dispatch = useDispatch();
-    const translateX = useSharedValue(0);
-    const threshold = -100;
-
-    // свайп жест
-    const panGesture = Gesture.Pan()
-        .onUpdate((e) => {
-            if (e.translationX < 0) {
-                translateX.value = e.translationX;
-            }
-        })
-        .onEnd((e) => {
-            if (e.translationX < threshold) {
-                translateX.value = withTiming(-500, { duration: 200 }, () => {
-                    runOnJS(dispatch)(
-                        removeUserExerciseSet({ exerciseId, setId: id })
-                    );
-                    translateX.value = 0;
-                });
-            } else {
-                translateX.value = withSpring(0, { stiffness: 150 });
-            }
-        });
-
-    const animatedStyle = useAnimatedStyle(() => ({
-        transform: [{ translateX: translateX.value }],
-    }));
 
     return (
-        <GestureDetector gesture={panGesture}>
+        <>
             <Animated.View
                 style={[
                     styles.container,
@@ -72,10 +46,8 @@ export const SetCard: FC<ISetCard> = ({
                             ? COLORS.gray04
                             : "transparent",
                     },
-                    animatedStyle,
                 ]}
             >
-                {/* Номер сета */}
                 <Text
                     style={[
                         styles.cell,
@@ -87,7 +59,6 @@ export const SetCard: FC<ISetCard> = ({
                     {set}
                 </Text>
 
-                {/* Предыдущий результат */}
                 <Text
                     style={[
                         styles.cell,
@@ -98,7 +69,6 @@ export const SetCard: FC<ISetCard> = ({
                     {prev || "-"}
                 </Text>
 
-                {/* Вес */}
                 <View style={[styles.cell, { width: COLUMN_WIDTH.weight }]}>
                     <Input
                         size="small"
@@ -111,7 +81,6 @@ export const SetCard: FC<ISetCard> = ({
                     />
                 </View>
 
-                {/* Повторы */}
                 <View style={[styles.cell, { width: COLUMN_WIDTH.reps }]}>
                     <Input
                         size="small"
@@ -122,7 +91,6 @@ export const SetCard: FC<ISetCard> = ({
                     />
                 </View>
 
-                {/* Чекбокс */}
                 <View
                     style={[
                         styles.cell,
@@ -133,55 +101,20 @@ export const SetCard: FC<ISetCard> = ({
                     {isChecked ? (
                         <Icon
                             Icon={CheckSquare}
-                            size={25}
+                            size={30}
                             color={COLORS.primary}
                             onPress={() => setIsChecked(false)}
                         />
                     ) : (
                         <Icon
                             Icon={Square}
-                            size={25}
+                            size={30}
                             color={COLORS.gray04}
                             onPress={() => setIsChecked(true)}
                         />
                     )}
                 </View>
-
-                {/* Анимация длительности */}
-                <View style={styles.durationContainer}>
-                    <View
-                        style={[
-                            styles.durationLine,
-                            styles.durationTimelineBack,
-                        ]}
-                    />
-                    {isChecked && (
-                        <Animated.View
-                            style={[
-                                styles.durationLine,
-                                styles.durationTimeline,
-                                {
-                                    width: `${
-                                        (1 - Number(durationSeconds) / 60) * 100
-                                    }%`,
-                                },
-                            ]}
-                        />
-                    )}
-                    <Animated.Text
-                        style={[
-                            styles.durationTimeText,
-                            {
-                                color: isChecked
-                                    ? COLORS.primary
-                                    : COLORS.gray04,
-                            },
-                        ]}
-                    >
-                        {formatTime(durationSeconds)}
-                    </Animated.Text>
-                </View>
             </Animated.View>
-        </GestureDetector>
+        </>
     );
 };
